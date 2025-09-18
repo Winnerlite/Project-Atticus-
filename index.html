@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
- <!-- clarity --> 
+ <!-- clarity -->
      <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -10,6 +10,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "r4ikpxyih2");
      </script>
+     
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -70,7 +71,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 100;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
             transition: var(--transition);
         }
@@ -1503,21 +1504,46 @@ body.light-mode .auth-cta p {
 
 
 /* Mute Button */
-.mute-toggle {
+.mute-toggle, #muteToggle {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.6);
+  top: 12px;          /* adjust to where you want it */
+  right: 12px;        /* or left if you prefer */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   border: none;
-  color: white;
-  padding: 8px;
-  border-radius: 50%;
-  font-size: 18px;
+  background: rgba(0,0,0,0.4);
+  color: rgba(255,255,255,0.9);
   cursor: pointer;
-  z-index: 2;
-  transition: background 0.3s ease;
+  z-index: 220;       /* above video overlay */
+  padding: 6px;
+  transition: background .15s, transform .08s;
+}
+.mute-toggle:hover { background: rgba(0,0,0,0.6); transform: translateY(-1px); }
+.mute-toggle:active { transform: translateY(0); }
+
+/* By default assume unmuted */
+#muteToggle.unmuted .icon-waves,
+#muteToggle.unmuted .icon-waves-2 {
+  display: inline;
+}
+#muteToggle.unmuted .icon-muted {
+  display: none;
 }
 
+/* When muted */
+#muteToggle.muted .icon-waves,
+#muteToggle.muted .icon-waves-2 {
+  display: none;
+}
+#muteToggle.muted .icon-muted {
+  display: inline;
+}
+
+/* Hover effect */
 .mute-toggle:hover {
   background: rgba(0, 0, 0, 0.8);
 }
@@ -2897,6 +2923,254 @@ margin-top: 200px;
     transform: scale(1.05);
 }
 
+
+/* Add to your existing CSS */
+.skeleton {
+    background: linear-gradient(90deg, #2a2a32 25%, #3a3a42 50%, #2a2a32 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    width: 100%;
+}
+
+.skeleton-thumbnail {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #2a2a32;
+}
+
+.skeleton-content {
+    padding: 15px;
+}
+
+.skeleton-line {
+    height: 16px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+.skeleton-line.short {
+    width: 60%;
+}
+
+.skeleton-line.medium {
+    width: 80%;
+}
+
+.skeleton-line:last-child {
+    margin-bottom: 0;
+    width: 40%;
+}
+
+.carousel-skeleton-item {
+    flex: 0 0 calc(80% - 20px);
+    min-width: 0;
+    aspect-ratio: 16/9;
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .carousel-skeleton-item {
+        flex: 0 0 calc(50% - 20px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .carousel-skeleton-item {
+        flex: 0 0 calc(33.33% - 20px);
+    }
+}
+
+/* Add this to your existing CSS */
+.thumbnail {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.thumbnail.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* For carousel items */
+.carousel-item .thumbnail {
+    transition-delay: 0.1s;
+}
+
+/* For grid items */
+.card .thumbnail {
+    transition-delay: 0.2s;
+}
+
+/* Add this to your existing CSS for a fadein */
+.thumbnail {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.thumbnail.loaded {
+    opacity: 1;
+}
+
+/* Optional: Add slight delay for staggered effect */
+.card:nth-child(odd) .thumbnail {
+    transition-delay: 0.1s;
+}
+
+.card:nth-child(even) .thumbnail {
+    transition-delay: 0.2s;
+}
+
+/* Top 10 button styled like tubetrailer overlay */
+.top10-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.4);
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 210; /* above video but below other UI if needed */
+  transition: background 0.2s;
+}
+
+.top10-btn:hover {
+  background: rgba(0,0,0,0.6);
+}
+
+/* Fullscreen dark backdrop */
+/* Backdrop */
+.top10-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;   /* <- solid black instead of rgba */
+  z-index: 900;
+  overflow-y: auto;
+}
+
+/* Container */
+.top10-modal-content {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+/* Close button */
+.top10-modal .close-btn {
+  position: fixed;        /* instead of absolute */
+  right: 20px;
+  top: 20px;
+  font-size: 26px;
+  color: rgba(255,255,255,0.85);
+  background: rgba(0,0,0,0.5); /* subtle dark circle background */
+  border: none;
+  cursor: pointer;
+  z-index: 6000;          /* higher than modal content */
+  padding: 4px 10px;
+  border-radius: 20px;
+  line-height: 1;
+  transition: background 0.2s, color 0.2s;
+}
+.top10-modal .close-btn:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+
+#top10Player {
+  width: 100%;
+  height: 55vh;
+  background: #000;
+}
+
+
+
+/* Trailer List */
+.modal-list {
+  padding: 16px;
+}
+.modal-list h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+.top10-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.top10-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+.top10-thumb {
+  width: 120px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.top10-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.top10-modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;       /* full screen height */
+  overflow-y: auto;    /* internal scroll */
+  padding-bottom: 80px; /* reserve space for bottom nav */
+}
+
+/* Fixed Player */
+.modal-player {
+  position: sticky;
+  top: 0;
+  background: #000;
+  z-index: 5;
+}
+#top10Player {
+  width: 100%;
+  height: 55vh;
+  background: #000;
+}
+.release-status {
+  padding: 12px 20px;
+  text-align: center;       /* ✅ centers the text */
+  font-size: 16px;
+  font-weight: 700;         /* ✅ makes it bold */
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
     </style>
 </head>
 <body>
@@ -2968,13 +3242,29 @@ margin-top: 200px;
     </video>
     
     <a href="#" id="videoLink" class="video-link" target="_blank" rel="noopener"></a>
+    <!-- Top 10 Trailers button inside player -->
+<button id="top10Btn" class="top10-btn">See Top 10 Trailers</button>
   </div>
   
-  <button class="mute-toggle" onclick="toggleMute()">
-    <i class="fas fa-volume-up" id="muteIcon"></i>
-  </button>
+  <button class="mute-toggle" id="muteToggle" aria-pressed="false" aria-label="Mute" title="Mute / Unmute">
+  <!-- Speaker (unmuted) -->
+  <svg id="muteSvg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+    <!-- speaker body -->
+    <path class="icon-speaker" d="M5 9v6h4l5 4V5L9 9H5z" fill="currentColor"></path>
+    <!-- sound waves (visible when unmuted) -->
+    <path class="icon-waves" d="M15.5 8.5a3.5 3.5 0 010 7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+    <path class="icon-waves-2" d="M17.5 6.5a6 6 0 010 11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+    <!-- muted X (visible when muted) -->
+    <g class="icon-muted" style="display:none;">
+      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+  </svg>
+</button>
   <div class="ad-label">Ad</div>
+  
 </div>
+
 
 
 <div class="native-ad-section">
@@ -3370,6 +3660,29 @@ margin-top: 200px;
     </div>
 </div>
 
+
+<!-- Top 10 Trailers Modal -->
+<!-- Top 10 Trailers Modal -->
+<div id="top10Modal" class="top10-modal">
+  <div class="top10-modal-content">
+    <span id="closeTop10Btn" class="close-btn">×</span>
+
+    <!-- Fixed Video Player -->
+    <div class="modal-player">
+      <video id="top10Player" controls autoplay playsinline></video>
+    </div>
+
+    <!-- Release Status -->
+<div id="releaseStatus" class="release-status"></div>
+
+    <!-- Trailer list -->
+    <div class="modal-list">
+      <h3>Top 10 Trending</h3>
+      <div id="top10List">Loading...</div>
+    </div>
+  </div>
+</div>
+
     <div id="aboutModal" class="modal">
     <div class="modal-content premium-modal">
         <span class="close-btn" onclick="hideAboutModal()">×</span>
@@ -3535,7 +3848,7 @@ const cachedForYouResults = loadFromCache('cachedForYouResults') || [];
         currentKeyIndex = (currentKeyIndex + 1) % apiKeys.length;
         console.log(`Switched to API key ${currentKeyIndex + 1}`);
         if (currentKeyIndex === 0) {
-            showError("Failed to Load. Please try again in a min. Apologies User we are working on it");
+            showError("Failed to Load. Please try again in a min. Apologies we are working on it");
             throw new Error("Try Again in 1 min");
         }
     }
@@ -3562,7 +3875,26 @@ function getVideoId() {
   return videoId;
 }
 
-
+function showSkeletons() {
+    // Carousel skeleton
+    const carouselContainer = document.getElementById('exploreCarousel');
+    if (carouselContainer) {
+        carouselContainer.innerHTML = generateCarouselSkeleton();
+    }
+    
+    // Content section skeletons
+    const sections = ['trailerResults', 'moviesResults', 'animeResults'];
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            // Create 6 skeleton cards for each section
+            section.innerHTML = Array(6).fill().map(() => generateCardSkeleton()).join('');
+        }
+    });
+    
+    // Hide forYouSection while loading
+    document.getElementById('forYouSection').style.display = 'none';
+}
     function showLoading(show) {
         document.getElementById('loading').style.display = show ? 'flex' : 'none';
     }
@@ -3760,8 +4092,63 @@ function showToast(message) {
     });
 }
 
+function generateCarouselSkeleton() {
+    const skeletonItems = Array(5).fill().map(() => `
+        <div class="carousel-skeleton-item skeleton">
+            <div class="skeleton-thumbnail"></div>
+        </div>
+    `).join('');
+    
+    return `
+        <div class="carousel-container">
+            <div class="carousel-track" style="transform: translateX(0px)">
+                ${skeletonItems}
+            </div>
+        </div>
+    `;
+}
+
+function generateCardSkeleton() {
+    return `
+        <div class="skeleton-card">
+            <div class="skeleton-thumbnail skeleton"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+    `;
+}
+// Function to handle image loading with fade-in effect
+function loadImageWithFade(imgElement) {
+    if (imgElement.complete) {
+        imgElement.classList.add('loaded');
+    } else {
+        imgElement.addEventListener('load', function() {
+            this.classList.add('loaded');
+        });
+        imgElement.addEventListener('error', function() {
+            // Optional: handle broken images
+            this.classList.add('loaded');
+        });
+    }
+}
+
+// Function to initialize fade-in for all images
+function initImageFade() {
+    document.querySelectorAll('.thumbnail').forEach(img => {
+        loadImageWithFade(img);
+    });
+}
+
+// After your content is rendered, call:
+setTimeout(initImageFade, 100);
+
 
     async function fetchExploreContent() {
+      // Show skeletons first
+    showSkeletons();
     showLoading(true);
     try {
         const trailerResponse = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=latest+movie+trailers&type=video&key=${getApiKey()}`);
@@ -3820,11 +4207,13 @@ function showToast(message) {
         createExploreCarousel();
         fetchForYouContent();
     } catch (error) {
-        showError(`Failed to load content. Apologies User, we are working on it. hold on a bit: ${error.message}`);
+        showError(`Failed to load content. Apologies, we are working on an upgrade. hold on a bit: ${error.message}`);
     } finally {
         showLoading(false);
     }
 }
+
+
 
 function isAnimeRelated(video) {
         const title = video.snippet.title?.toLowerCase() || '';
@@ -4006,10 +4395,10 @@ window.moveCarousel = moveCarousel;
                 data-thumbnail="${video.snippet.thumbnails.medium.url}">
             <i class="fas fa-heart"></i>
         </button>
-        <img src="${video.snippet.thumbnails.medium.url}" class="thumbnail"
-             data-video-id="${video.id.videoId}"
-             data-title="${escapeHtml(video.snippet.title)}"
-             data-thumbnail="${video.snippet.thumbnails.medium.url}">
+        <img src="${video.snippet.thumbnails.medium.url}" class="thumbnail" 
+         data-video-id="${video.id.videoId}"
+         data-title="${escapeHtml(video.snippet.title)}"
+         data-thumbnail="${video.snippet.thumbnails.medium.url}">
         <div class="card-content">
             <div class="video-title">${escapeHtml(video.snippet.title)}</div>
             <div class="channel">${escapeHtml(video.snippet.channelTitle)}</div>
@@ -5638,12 +6027,22 @@ document.addEventListener('DOMContentLoaded', loadMovieSections);
   
   <!-- mute toggle for ad video-->
   function toggleMute() {
-    const video = document.getElementById("customAdVideo");
-    const icon = document.getElementById("muteIcon");
+  isMuted = !isMuted; // flip state
 
-    video.muted = !video.muted;
-    icon.className = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
+  // Apply mute state to both videos
+  front.muted = isMuted;
+  back.muted = isMuted;
+
+  // Update button class for SVG icons
+  const muteToggle = document.getElementById('muteToggle');
+  if (isMuted) {
+    muteToggle.classList.add('muted');
+    muteToggle.classList.remove('unmuted');
+  } else {
+    muteToggle.classList.add('unmuted');
+    muteToggle.classList.remove('muted');
   }
+}
   
   
 const playlist = [
@@ -5693,11 +6092,21 @@ function playVideo(index) {
     console.log("Autoplay blocked:", e);
     // Fallback: mute and try again
     front.muted = true;
+    back.muted = true;
     isMuted = true;
-    document.getElementById("muteIcon").className = "fas fa-volume-mute";
+
+    // Update SVG icon → muted state
+    document.addEventListener('DOMContentLoaded', () => {
+  const muteToggle = document.getElementById('muteToggle');
+  muteToggle.classList.add(isMuted ? 'muted' : 'unmuted');
+  muteToggle.addEventListener('click', toggleMute);
+});
+
     front.play();
   });
 }
+
+
 
 // Proper crossfade transition
 front.addEventListener("ended", () => {
@@ -5723,27 +6132,7 @@ front.addEventListener("ended", () => {
   [front, back] = [back, front];
 });
 
-// Working mute toggle
-function toggleMute() {
-  isMuted = !isMuted;
-  front.muted = isMuted;
-  back.muted = isMuted;
-  
-  // Update icon
-  document.getElementById("muteIcon").className = 
-    isMuted ? "fas fa-volume-mute" : "fas fa-volume-up";
-}
 
-// Initialize first video
-playVideo(0);
-function toggleMute() {
-  const isMuted = front.muted;
-  front.muted = !isMuted;
-  back.muted = !isMuted;
-  
-  const icon = document.getElementById("muteIcon");
-  icon.className = isMuted ? "fas fa-volume-up" : "fas fa-volume-mute";
-}
 
 // Initialize
 playVideo(0);
@@ -5766,8 +6155,8 @@ playVideo(0);
  
 </script>
 
-<!-- Default Statcounter code for TubeTrailer
-http://tubetrailerweb.vercel.app -->
+<!-- Default Statcounter code for TubeTrailer -->
+http://tubetrailerweb.vercel.app 
 <script type="text/javascript">
 var sc_project=13118904; 
 var sc_invisible=1; 
@@ -6148,6 +6537,7 @@ try {
   }
 }
 
+
 function startHelperTextFade() {
   // Hide helper note after 15s
   setTimeout(() => {
@@ -6168,6 +6558,136 @@ function startHelperTextFade() {
   // Stop rotation after 20s
   setTimeout(() => clearInterval(fadeInterval), 20000);
 }
+
+
+//Top 10 trailer js
+document.addEventListener('DOMContentLoaded', () => {
+  // Modal + player elements
+  const top10Btn = document.getElementById('top10Btn');
+  const top10Modal = document.getElementById('top10Modal');
+  const closeTop10Btn = document.getElementById('closeTop10Btn');
+  const top10List = document.getElementById('top10List');
+  const top10Player = document.getElementById('top10Player');
+  const notifyBtn = document.getElementById('notifyBtn');
+  const notifyMsg = document.getElementById('notifyMsg');
+
+  // Explore tab videos
+  const vidA = document.getElementById('vidA'); // main visible video
+  const vidB = document.getElementById('vidB'); // preloading video
+
+  // Define your 10 trailers here
+  const TOP10_TRAILERS = [
+    {
+      title: "The Great Flood",
+      videoUrl: "https://ia601008.us.archive.org/32/items/monster-the-ed-gein-story-official-trailer-netflix-720p/The_Great_Flood___Official_Teaser___Netflix%28480p%29.mp4",
+      thumb: "https://i.ibb.co/d4Xtr3Fp/ad0165e5a3100bee9d8a08ee68685c44.webp",
+      releaseDate: "2025-12-19"  // YYYY-MM-DD
+  
+    },
+    {
+      title: "Monster: The Ed gein story",
+      videoUrl: "https://ia601008.us.archive.org/32/items/monster-the-ed-gein-story-official-trailer-netflix-720p/MONSTER__The_Ed_Gein_Story___Official_Trailer___Netflix%28720p%29.mp4",
+      thumb: "https://i.ibb.co/jkFBJT7H/ed-gein-monster.jpg",
+      releaseDate: "2025-10-03"  // YYYY-MM-DD
+  
+    },
+    {
+      title: "Baki Dou",
+      videoUrl: "https://ia801004.us.archive.org/28/items/baki-dou-official-teaser-netflix-anime-720p_202509/BAKI-DOU___Official_Teaser___Netflix_Anime%28720p%29.mp4",
+      thumb: "https://i.ibb.co/6Rz2Wg0Y/musashi-from-the-baki-dou-netflix-poster.jpg",
+      releaseDate: "2026-00-00"  // YYYY-MM-DD
+ 
+    },
+    
+      {
+      title: "The Last Ronin",
+      videoUrl: "https://ia801007.us.archive.org/22/items/the-last-ronin-official-trailer-2025-720p/THE_LAST_RONIN_Official_Trailer__2025_%28720p%29.mp4",
+      thumb: "https://i.ibb.co/Kj7Jxsxb/hq720-6.jpg",
+      releaseDate: "2025-12-25"  // YYYY-MM-DD
+ 
+    }
+    
+    
+    // ... add up to 10
+  ];
+
+  // Open modal
+  top10Btn.addEventListener('click', () => {
+    top10Modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    renderList();
+
+    // preload first trailer
+    if (TOP10_TRAILERS[0]) {
+  top10Player.src = TOP10_TRAILERS[0].videoUrl;
+  top10Player.play();
+
+  // 🔑 Show release status for the first trailer
+  const statusEl = document.getElementById("releaseStatus");
+  if (statusEl) {
+    statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[0].releaseDate);
+  }
+}
+
+    // Pause explore player
+    vidA?.pause();
+    vidB?.pause();
+  });
+
+  // Close modal
+  closeTop10Btn.addEventListener('click', () => {
+    top10Modal.style.display = 'none';
+    document.body.style.overflow = '';
+
+    // Stop modal video
+    top10Player.pause();
+    top10Player.removeAttribute('src');
+
+    // Resume explore player
+    if (vidA && vidA.src) {
+      vidA.play().catch(() => {});
+    }
+  });
+
+  // Click outside closes
+  top10Modal.addEventListener('click', (e) => {
+    if (e.target === top10Modal) closeTop10Btn.click();
+  });
+  
+  function getReleaseStatus(dateString) {
+  const today = new Date();
+  const releaseDate = new Date(dateString);
+
+  if (today < releaseDate) {
+    return `Releases on ${releaseDate.toDateString()}`;
+  } else {
+    return "Releases Next Year ";
+  }
+}
+
+  // Render list of trailers
+  function renderList() {
+  top10List.innerHTML = TOP10_TRAILERS.map((t, i) => `
+    <div class="top10-item" data-idx="${i}">
+      <img src="${t.thumb}" class="top10-thumb" alt="${t.title}">
+      <div class="top10-title">${t.title}</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.top10-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = el.dataset.idx;
+      top10Player.src = TOP10_TRAILERS[idx].videoUrl;
+      top10Player.play();
+
+      // 🔑 Update release status text
+      const statusEl = document.getElementById("releaseStatus");
+      statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
+    });
+  });
+}
+});
+
 
 const links = [
   "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
@@ -6192,6 +6712,9 @@ setInterval(() => {
   currentLinkIndex = (currentLinkIndex + 1) % links.length;
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 }, 30000); // Redirect every 30 seconds
+
+
+
 </script>
 </body>
 </html>
