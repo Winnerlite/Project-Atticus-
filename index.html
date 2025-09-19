@@ -6072,41 +6072,71 @@ let front = document.getElementById("vidA");
 let back = document.getElementById("vidB");
 let videoLink = document.getElementById("videoLink");
 let currentIndex = 0;
-let isMuted = false; // Track mute state globally
+let isMuted = true; // Track mute state globally
 
 // Improved play function with sound handling
 function playVideo(index) {
   // Reset both videos
   front.style.opacity = "1";
   back.style.opacity = "0";
-  
+
   front.src = playlist[index].url;
   videoLink.href = playlist[index].link;
-  
+
   // Apply current mute state
   front.muted = isMuted;
   back.muted = isMuted;
-  
-  // Try playing with sound
+
+  // Try playing with sound; if blocked, mute and try again
   front.play().catch(e => {
     console.log("Autoplay blocked:", e);
-    // Fallback: mute and try again
+
+    // Fallback: force muted playback
+    isMuted = true;
     front.muted = true;
     back.muted = true;
-    isMuted = true;
 
-    // Update SVG icon → muted state
-    document.addEventListener('DOMContentLoaded', () => {
-  const muteToggle = document.getElementById('muteToggle');
-  muteToggle.classList.add(isMuted ? 'muted' : 'unmuted');
-  muteToggle.addEventListener('click', toggleMute);
-});
+    // Update visual state of the (hidden) muteToggle SVG if it exists
+    const muteToggle = document.getElementById('muteToggle');
+    if (muteToggle) {
+      muteToggle.classList.add('muted');
+      muteToggle.classList.remove('unmuted');
+    }
 
-    front.play();
+    // Try play again (silently handle any further failure)
+    front.play().catch(err => {
+      console.warn("Play still failed after muting:", err);
+    });
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  // Ensure players start muted by default (if you want default mute)
+  isMuted = true;
+  if (front) front.muted = isMuted;
+  if (back) back.muted = isMuted;
 
+  const muteToggle = document.getElementById('muteToggle');
+  if (muteToggle) {
+    // set initial visual class
+    muteToggle.classList.add(isMuted ? 'muted' : 'unmuted');
+
+    // repurpose click: open Top 10 modal quickly
+    muteToggle.addEventListener('click', () => {
+      // open modal logic (reuses your modal code)
+      top10Modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      renderList();
+
+      if (TOP10_TRAILERS && TOP10_TRAILERS[0]) {
+        top10Player.src = TOP10_TRAILERS[0].videoUrl;
+        top10Player.play();
+        const statusEl = document.getElementById('releaseStatus');
+        if (statusEl) statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[0].releaseDate);
+      }
+    });
+  }
+});
 
 // Proper crossfade transition
 front.addEventListener("ended", () => {
@@ -6668,11 +6698,57 @@ document.addEventListener('DOMContentLoaded', () => {
   // Render list of trailers
   function renderList() {
   top10List.innerHTML = TOP10_TRAILERS.map((t, i) => `
-    <div class="top10-item" data-idx="${i}">
+    <div class="top10-item" data-idx="${i}" data-video="${encodeURIComponent(t.videoUrl)}">
       <img src="${t.thumb}" class="top10-thumb" alt="${t.title}">
-      <div class="top10-title">${t.title}</div>
+      <div class="top10-details">
+        <div class="top10-title">${t.title}</div>
+        <div class="top10-meta">
+             <!--
+          <span class="view-count">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zm0 12.5c-2.8 0-5-2.2-5-5s2.2-5 
+              5-5 5 2.2 5 5-2.2 5-5 5z"/><circle cx="12" cy="12" r="2.5"/>
+            </svg>
+            <span class="view-number">0</span>
+          </span>
+          <span class="like-count">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.3l.9-4.6v-.3c0-.4-.2-.8-.4-1.1L13.2 1 7.6 7.6C7.2 
+              8 7 8.5 7 9v10c0 1.1.9 2 2 2h9c.8 0 1.5-.5 1.8-1.2l3-7c.1-.3.2-.6.2-.8v-2z"/>
+            </svg>
+            <span class="like-number">0</span>
+          </span>
+     Comment out for now    -->
+        </div>
+      </div>
     </div>
   `).join('');
+  
+// Attach click listeners to each trailer card makes the frontend increment 
+document.querySelectorAll('.top10-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const idx = parseInt(el.dataset.idx, 10);
+    const videoUrl = TOP10_TRAILERS[idx].videoUrl;
+
+    // Play video in modal
+    top10Player.src = videoUrl;
+    top10Player.play();
+
+    // Update release status
+    const statusEl = document.getElementById("releaseStatus");
+    if (statusEl) {
+      statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
+    }
+
+    // Find view number element
+    const viewNumEl = el.querySelector('.view-number');
+    if (viewNumEl) {
+      let current = parseInt(viewNumEl.textContent.replace(/\D/g, ''), 10) || 0;
+      current++;
+      viewNumEl.textContent = current;
+    }
+  });
+});  
 
   document.querySelectorAll('.top10-item').forEach(el => {
     el.addEventListener('click', () => {
@@ -6712,8 +6788,6 @@ setInterval(() => {
   currentLinkIndex = (currentLinkIndex + 1) % links.length;
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 }, 30000); // Redirect every 30 seconds
-
-
 
 </script>
 </body>
