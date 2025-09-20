@@ -3243,7 +3243,7 @@ margin-top: 200px;
     
     <a href="#" id="videoLink" class="video-link" target="_blank" rel="noopener"></a>
     <!-- Top 10 Trailers button inside player -->
-<button id="top10Btn" class="top10-btn">See Top 10 Trailers</button>
+<button id="top10Btn" class="top10-btn">Watch What's Trending</button>
   </div>
   
   <button class="mute-toggle" id="muteToggle" aria-pressed="false" aria-label="Mute" title="Mute / Unmute">
@@ -3677,7 +3677,7 @@ margin-top: 200px;
 
     <!-- Trailer list -->
     <div class="modal-list">
-      <h3>Top 10 Trending</h3>
+      <h3>What Others are watching</h3>
       <div id="top10List">Loading...</div>
     </div>
   </div>
@@ -6185,8 +6185,8 @@ playVideo(0);
  
 </script>
 
-<!-- Default Statcounter code for TubeTrailer -->
-http://tubetrailerweb.vercel.app 
+<!-- Default Statcounter code for TubeTrailer 
+http://tubetrailerweb.vercel.app -->
 <script type="text/javascript">
 var sc_project=13118904; 
 var sc_invisible=1; 
@@ -6635,7 +6635,35 @@ document.addEventListener('DOMContentLoaded', () => {
       thumb: "https://i.ibb.co/Kj7Jxsxb/hq720-6.jpg",
       releaseDate: "2025-12-25"  // YYYY-MM-DD
  
-    }
+    },
+    
+     {
+      title: "Anaconda",
+      videoUrl: "https://ia601004.us.archive.org/33/items/anaconda-official-trailer-hd-720p/ANACONDA_%E2%80%93_Official_Trailer__HD_%28720p%29.mp4",
+      thumb: "https://i.ibb.co/Z5C6cpH/ANA-Official-Poster-Social-1080x1350.jpg",
+      releaseDate: "2025-12-25"  // YYYY-MM-DD
+ 
+    },
+    
+     {
+      title: "Wake up Dead Man- A knives out mystery",
+      videoUrl: "https://ia601006.us.archive.org/34/items/wake-up-dead-man-a-knives-out-mystery-official-teaser-netflix-480p/Wake_Up_Dead_Man__A_Knives_Out_Mystery___Official_Teaser___Netflix%28480p%29.mp4",
+      thumb: "https://i.ibb.co/BHSvRrW5/AAAABc-Nan-0-Ym-Ze70jjz-Wrjl-QAi68-Nt522-UZlpo-Mfeq1-Dn-QAqgl-ELh-JMreh-Zi-GCt-JJi-XARedn-WASOICn-SQ.jpg",
+      releaseDate: "2025-12-25"  // YYYY-MM-DD
+ 
+    },
+    
+    {
+      title: "The Rip",
+      videoUrl: "https://ia600306.us.archive.org/27/items/the-rip-official-teaser-netflix-480p/The_Rip___Official_Teaser___Netflix%28480p%29.mp4",
+      thumb: "https://i.ibb.co/QvFGXqkp/Screenshot-2025-09-09-at-9-37-22-PM.png",
+      releaseDate: "2026-01-16"  // YYYY-MM-DD
+ 
+    },
+    
+    
+    
+    
     
     
     // ... add up to 10
@@ -6697,59 +6725,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render list of trailers
   function renderList() {
+  if (!top10List) return;
+
   top10List.innerHTML = TOP10_TRAILERS.map((t, i) => `
-    <div class="top10-item" data-idx="${i}" data-video="${encodeURIComponent(t.videoUrl)}">
-      <img src="${t.thumb}" class="top10-thumb" alt="${t.title}">
+    <div class="top10-item" data-idx="${i}">
+      <img src="${t.thumb || ''}" class="top10-thumb" alt="${t.title || 'Trailer'}">
       <div class="top10-details">
-        <div class="top10-title">${t.title}</div>
+        <div class="top10-title">${t.title || 'Untitled'}</div>
         <div class="top10-meta">
-             <!--
-          <span class="view-count">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zm0 12.5c-2.8 0-5-2.2-5-5s2.2-5 
-              5-5 5 2.2 5 5-2.2 5-5 5z"/><circle cx="12" cy="12" r="2.5"/>
-            </svg>
-            <span class="view-number">0</span>
+          <!-- Correct eye icon -->
+          <span class="view-count" title="Views">
+            <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-eye" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"></path>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"></path>
+</svg>
+            <span class="view-number">${t.views !== undefined ? t.views : 0}</span>
           </span>
-          <span class="like-count">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.3l.9-4.6v-.3c0-.4-.2-.8-.4-1.1L13.2 1 7.6 7.6C7.2 
-              8 7 8.5 7 9v10c0 1.1.9 2 2 2h9c.8 0 1.5-.5 1.8-1.2l3-7c.1-.3.2-.6.2-.8v-2z"/>
-            </svg>
-            <span class="like-number">0</span>
-          </span>
-     Comment out for now    -->
         </div>
       </div>
     </div>
   `).join('');
-  
-// Attach click listeners to each trailer card makes the frontend increment 
-document.querySelectorAll('.top10-item').forEach(el => {
-  el.addEventListener('click', () => {
-    const idx = parseInt(el.dataset.idx, 10);
-    const videoUrl = TOP10_TRAILERS[idx].videoUrl;
 
-    // Play video in modal
-    top10Player.src = videoUrl;
-    top10Player.play();
+  // Attach click listeners
+  document.querySelectorAll('.top10-item').forEach(el => {
+    el.addEventListener('click', async () => {
+      const idx = parseInt(el.dataset.idx, 10);
+      const videoUrl = TOP10_TRAILERS[idx].videoUrl;
 
-    // Update release status
-    const statusEl = document.getElementById("releaseStatus");
-    if (statusEl) {
-      statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
-    }
+      // play video
+      top10Player.src = videoUrl;
+      top10Player.play();
 
-    // Find view number element
-    const viewNumEl = el.querySelector('.view-number');
-    if (viewNumEl) {
-      let current = parseInt(viewNumEl.textContent.replace(/\D/g, ''), 10) || 0;
-      current++;
-      viewNumEl.textContent = current;
-    }
+      // update release status
+      const statusEl = document.getElementById("releaseStatus");
+      if (statusEl) statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
+
+      // update local UI instantly
+      const viewNumEl = el.querySelector('.view-number');
+      if (viewNumEl) {
+        const current = parseInt(viewNumEl.textContent.replace(/\D/g, ''), 10) || 0;
+        viewNumEl.textContent = current + 1;
+      }
+
+      // persist via your worker
+      try {
+        const res = await fetch(`https://tubeanime.winnerukoh.workers.dev?key=${encodeURIComponent(videoUrl)}`, { method: 'POST' });
+        const data = await res.json();
+        if (data && data.views && viewNumEl) viewNumEl.textContent = data.views;
+      } catch (err) {
+        console.warn('worker increment failed', err);
+      }
+    });
   });
-});  
 
+  // load existing counts
+  if (typeof loadViewsFromWorker === 'function') loadViewsFromWorker();
+
+
+async function loadViewsFromWorker() {
+  for (let i = 0; i < TOP10_TRAILERS.length; i++) {
+    const videoUrl = TOP10_TRAILERS[i].videoUrl;
+    const el = document.querySelector(`.top10-item[data-idx="${i}"] .view-number`);
+    if (!el) continue;
+
+    try {
+      const res = await fetch(`https://tubeanime.winnerukoh.workers.dev?key=${encodeURIComponent(videoUrl)}`);
+      const data = await res.json();
+      el.textContent = data.views;
+    } catch (err) {
+      console.error("Error loading views:", err);
+    }
+  }
+}
   document.querySelectorAll('.top10-item').forEach(el => {
     el.addEventListener('click', () => {
       const idx = el.dataset.idx;
@@ -6766,28 +6813,48 @@ document.querySelectorAll('.top10-item').forEach(el => {
 
 
 const links = [
-  "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
-  "https://pubertytechnicallyknowhow.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
+
+  "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
+
+  "https://pubertytechnicallyknowhow.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
+
 
 "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
 
+
 "https://www.profitableratecpm.com/cd3u7qtz?key=84fdd083654a6c66b57576e5df4186b4",
 
-"https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6"
+
+"https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6".
+
+"https://pubertytechnicallyknowhow.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb"
+
 
 ];
 
+
 // Load the last used index (default to 0 if not set)
+
 let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
+
 setInterval(() => {
-  // Redirect to the current link
-  window.location.href = links[currentLinkIndex];
-  
-  // Update and save the next index (0 → 1 → 0 → 1...)
-  currentLinkIndex = (currentLinkIndex + 1) % links.length;
-  localStorage.setItem('currentAdIndex', currentLinkIndex);
+
+  // Redirect to the current link
+
+  window.location.href = links[currentLinkIndex];
+
+  
+
+  // Update and save the next index (0 → 1 → 0 → 1...)
+
+  currentLinkIndex = (currentLinkIndex + 1) % links.length;
+
+  localStorage.setItem('currentAdIndex', currentLinkIndex);
+
 }, 30000); // Redirect every 30 seconds
+
+
 
 </script>
 </body>
