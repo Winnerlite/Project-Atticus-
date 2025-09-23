@@ -10,7 +10,7 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "r4ikpxyih2");
      </script>
-     
+     -->
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -3173,56 +3173,7 @@ margin-top: 200px;
 }
 
 
-.feedback-banner {
-  position: fixed;
-  bottom: 100px; /* just above your nav bar */
-  left: 0;
-  width: 100%;
-  background: var(--brand, #ff4757); /* your theme color */
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  padding: 8px 0;
-  z-index: 100;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
- 
 
-/* feedback for support*/
-.feedback-banner {
-  position: fixed;
-  bottom: 60px; /* sits just above nav bar */
-  left: 0;
-  width: 100%;
-  background: var(--brand, #ff4757);
-  color: #fff;
-  font-weight: bold;
-  text-align: center;
-  padding: 8px 0;
-  z-index: 3000;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-/* static text always visible */
-.feedback-static {
-  display: inline-block;
-}
-
-/* scrolling text hidden at first */
-.feedback-scroll {
-  position: absolute;
-  white-space: nowrap;
-  left: 100%;
-  animation: scrollText 8s linear;
-  display: none;
-}
-
-@keyframes scrollText {
-  0%   { left: 100%; }
-  100% { left: -100%; }
-}
     </style>
 </head>
 <body>
@@ -3588,11 +3539,7 @@ margin-top: 200px;
     </div>
 
 
-<!-- Feedback Banner -->
-<div class="feedback-banner" onclick="openModal('supportModal')">
-  <span class="feedback-static">Having issues? Tap here to send feedback.</span>
-  <span class="feedback-scroll">Having issues? Tap here to send feedback.</span>
-</div>
+
     <!-- Bottom Navigation -->
 <div class="bottom-nav">
       <a href="#" class="nav-item" data-page="playerPage">
@@ -3809,56 +3756,37 @@ margin-top: 200px;
     const apiKeys =
      [
    
-   "AIzaSyBauUTRbzyH19fGTNugyAOzRCzX8U7gUkM", //new key
-    "AIzaSyAMw0mfpXiqtfN7BbVzhh4YrItgCcZv9J8",
-     "AIzaSyAZe5WtOh-Tiuz8eqswJtoPs7oPVdyGquY", "AIzaSyDRA0Fzdwg5oIIxBBt2NowcrdbeucEa6cc",
-    "AIzaSyC_syRSRRxQR1DbtHZzMw9glxcR7My8ly4",
+   "AIzaSyB8gnyWMFpTIYnwXJaazYRTYhlIrIJDscQ", //new key
+    "AIzaSyAJilyAX3m48xyz64S1Ures3cOhGFH82BY",
+     "AIzaSyCUxVVghafri93DpCG38koYI9PBGkgVxh8",
+      "AIzaSyBKkHIlRPfLgmLPU-OTKjfzTQAa0Khg1rM",
+    "AIzaSyB1MgxYQiOq2avVl1tl2CMFSAk0sQOO1os",
 
-"AIzaSyABi7KdpAijF9gu09dSefpXJyhjIRY66Eg",
-            "AIzaSyAqLty-6vku33b3bpdG5S4oLkyoimdw8TU",
-            "AIzaSyBYixFCdGHJ2P512iW010glQRvd93EB6O8",
-            "AIzaSyDLW2mkmVVgQcoUpM86VFtOaCegFvyVk_g",
+"AIzaSyDKNCc6EpoHKT6L1uEdsn9aHxvc4p82O_A",
+            "AIzaSyAkD-sshxLf4hxWWntQTDZq37BxlmrrKBM",
+            "AIzaSyCMWEZhkAmIuDC5qrgaAhwpIDCULixjurk",
+            "AIzaSyB_COeKgWpyHaGEiEJ5X5fnYQsVXq3csnU",
             "AIzaSyDe7rOrqZFH3vIqP9zBtNkQ0Lqz4mBz9BI",
-            "AIzaSyDFH66idOZwfx-PfO1AXdsUeCa2gV1kCk4",
+            "AIzaSyAm8IieZmfxarjnUX7ZPGAMZ2ACogu1S14",
 
-"AIzaSyAlbWmxyzhL2RaNPNlPsANzY7R0JZUj_TU",
 
-"AIzaSyC4WKW6-m7RlZyu6EctRsN9XjiOz5Z7GWk",
-
-"AIzaSyDSBtLwMoliYaFW09BnVyzTQADrGABHzKw",
-"AIzaSyCME7E2t1cd8JTwpXIgDSyAwVMja2QHkL8",
-
-"AIzaSyDdrHGuGB5IKzv6_h7Dkgc60magvKu7YRI",
-
-"AIzaSyDKnfDW7ujsfEFFGV3kWxsmQg9DDtRAUTM",
-
-"AIzaSyC7v1svD5oJFa9Sg4aXFvatOMiwKB2EG2A",
-
-"AIzaSyBS1tt0v9_lLc5HAIAFMkTYbRzVUL27yI0",
-
-"AIzaSyDRA0Fzdwg5oIIxBBt2NowcrdbeucEa6cc"
    ];
    
    // YouTube API Keys
 const API_KEYS = [
 
-'AIzaSyBauUTRbzyH19fGTNugyAOzRCzX8U7gUkM', 
-    'AIzaSyC_syRSRRxQR1DbtHZzMw9glxcR7My8ly4',
-    'AIzaSyABi7KdpAijF9gu09dSefpXJyhjIRY66Eg',
-    'AIzaSyAqLty-6vku33b3bpdG5S4oLkyoimdw8TU',
-    'AIzaSyBYixFCdGHJ2P512iW010glQRvd93EB6O8',
-    'AIzaSyDLW2mkmVVgQcoUpM86VFtOaCegFvyVk_g',
+'AIzaSyB8gnyWMFpTIYnwXJaazYRTYhlIrIJDscQ',
+    'AIzaSyAJilyAX3m48xyz64S1Ures3cOhGFH82BY',
+    'AIzaSyCUxVVghafri93DpCG38koYI9PBGkgVxh8',
+    'AIzaSyBKkHIlRPfLgmLPU-OTKjfzTQAa0Khg1rM',
+    'AIzaSyB1MgxYQiOq2avVl1tl2CMFSAk0sQOO1os',
+    'AIzaSyDKNCc6EpoHKT6L1uEdsn9aHxvc4p82O_A',
+    'AIzaSyAkD-sshxLf4hxWWntQTDZq37BxlmrrKBM',
+    'AIzaSyCMWEZhkAmIuDC5qrgaAhwpIDCULixjurk',
+    'AIzaSyB_COeKgWpyHaGEiEJ5X5fnYQsVXq3csnU',
     'AIzaSyDe7rOrqZFH3vIqP9zBtNkQ0Lqz4mBz9BI',
-    'AIzaSyDFH66idOZwfx-PfO1AXdsUeCa2gV1kCk4',
-    'AIzaSyAlbWmxyzhL2RaNPNlPsANzY7R0JZUj_TU',
-    'AIzaSyC4WKW6-m7RlZyu6EctRsN9XjiOz5Z7GWk',
-    'AIzaSyDSBtLwMoliYaFW09BnVyzTQADrGABHzKw',
-    'AIzaSyCME7E2t1cd8JTwpXIgDSyAwVMja2QHkL8',
-    'AIzaSyDdrHGuGB5IKzv6_h7Dkgc60magvKu7YRI',
-    'AIzaSyDKnfDW7ujsfEFFGV3kWxsmQg9DDtRAUTM',
-    'AIzaSyC7v1svD5oJFa9Sg4aXFvatOMiwKB2EG2A',
-    'AIzaSyBS1tt0v9_lLc5HAIAFMkTYbRzVUL27yI0',
-    'AIzaSyDRA0Fzdwg5oIIxBBt2NowcrdbeucEa6cc'
+    'AIzaSyAm8IieZmfxarjnUX7ZPGAMZ2ACogu1S14'
+    
 ];
 
 let currentApiKeyIndex = 0;
@@ -6945,63 +6873,66 @@ function showToast(msg) {
   setTimeout(() => { toast.remove(); }, 3500);
 }
 
-
-// Set scrolling text for supp 
-document.addEventListener("DOMContentLoaded", () => {
-  const scrollText = document.querySelector(".feedback-scroll");
-
-  setTimeout(() => {
-    scrollText.style.display = "inline-block";   // show
-    scrollText.addEventListener("animationend", () => {
-      scrollText.style.display = "none";        // hide again when finished
-    });
-  }, 3000); // wait 3s before scrolling starts
-});
-
 const links = [
 
+
   "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
+
 
   "https://pubertytechnicallyknowhow.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
 
 
+
 "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+
 
 
 "https://www.profitableratecpm.com/cd3u7qtz?key=84fdd083654a6c66b57576e5df4186b4",
 
 
+
 "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
 
+
 "https://pubertytechnicallyknowhow.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb",
- "https://bmmads.com/get/?spot_id=2011426&cat=25&subid=1209812145"
+
+ "https://bmmads.com/get/?spot_id=2011426&cat=25&subid=1209812145"
+
 
 
 ];
 
 
+
 // Load the last used index (default to 0 if not set)
+
 
 let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
 
+
 setInterval(() => {
+
 
   // Redirect to the current link
 
+
   window.location.href = links[currentLinkIndex];
+
 
   
 
+
   // Update and save the next index (0 → 1 → 0 → 1...)
+
 
   currentLinkIndex = (currentLinkIndex + 1) % links.length;
 
+
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 
+
 }, 30000); // Redirect every 30 seconds
-
-
 
 </script>
 </div>
