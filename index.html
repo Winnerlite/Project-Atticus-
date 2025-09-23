@@ -3171,6 +3171,58 @@ margin-top: 200px;
   background: rgba(255,255,255,0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+
+.feedback-banner {
+  position: fixed;
+  bottom: 100px; /* just above your nav bar */
+  left: 0;
+  width: 100%;
+  background: var(--brand, #ff4757); /* your theme color */
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px 0;
+  z-index: 100;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+ 
+
+/* feedback for support*/
+.feedback-banner {
+  position: fixed;
+  bottom: 60px; /* sits just above nav bar */
+  left: 0;
+  width: 100%;
+  background: var(--brand, #ff4757);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px 0;
+  z-index: 3000;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* static text always visible */
+.feedback-static {
+  display: inline-block;
+}
+
+/* scrolling text hidden at first */
+.feedback-scroll {
+  position: absolute;
+  white-space: nowrap;
+  left: 100%;
+  animation: scrollText 8s linear;
+  display: none;
+}
+
+@keyframes scrollText {
+  0%   { left: 100%; }
+  100% { left: -100%; }
+}
     </style>
 </head>
 <body>
@@ -3456,6 +3508,12 @@ margin-top: 200px;
                 <span>Account</span>
                 <i class="fas fa-chevron-right"></i>
             </div>
+            
+            <div class="settings-card" onclick="openModal('supportModal')">
+  <div class="settings-icon about"><i class="fa-solid fa-headset"></i></div>
+  <h3>Support & Feedback</h3>
+  <p>Report issues or share suggestions</p>
+</div>
             <div class="settings-item" id="themeBtn">
                 <i class="fas fa-adjust"></i>
                 <span>Switch Theme</span>
@@ -3529,6 +3587,12 @@ margin-top: 200px;
         </div>
     </div>
 
+
+<!-- Feedback Banner -->
+<div class="feedback-banner" onclick="openModal('supportModal')">
+  <span class="feedback-static">Having issues? Tap here to send feedback.</span>
+  <span class="feedback-scroll">Having issues? Tap here to send feedback.</span>
+</div>
     <!-- Bottom Navigation -->
 <div class="bottom-nav">
       <a href="#" class="nav-item" data-page="playerPage">
@@ -3659,6 +3723,27 @@ margin-top: 200px;
             <li><strong>Tip:</strong> Instant Download is coming soon.</li>
         </ul>
     </div>
+</div>
+
+<!-- support modal-->
+<div id="supportModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('supportModal')">&times;</span>
+    <h3>Contact Support</h3>
+    <form id="supportForm">
+  <input type="hidden" name="access_key" value="cfd0ce94-a5c1-49f3-bd39-7f230f8fd63f">
+  
+  <input type="email" name="email" class="modal-input" placeholder="Your email" required>
+  
+  <!-- ✅ Added id="messageField" -->
+  <textarea id="messageField" name="message" class="modal-input" rows="4" placeholder="Describe your issue or feedback..." required></textarea>
+  
+  <div class="modal-actions">
+    <button type="submit" class="modal-btn primary">Send</button>
+    <button type="button" class="modal-btn secondary" onclick="closeModal('supportModal')">Cancel</button>
+  </div>
+</form>
+  </div>
 </div>
 
 
@@ -6813,6 +6898,63 @@ async function loadViewsFromWorker() {
 });
 
 
+function openModal(id) {
+  document.getElementById(id).style.display = "flex";
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+// Support form handler
+document.getElementById("supportForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const form = e.target;
+
+  // ✅ prepend "From TubeTrailer" at the top of the message
+  const msgField = document.getElementById("messageField");
+  msgField.value = "From TubeTrailer\n\n" + msgField.value;
+
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: new FormData(form)
+    });
+    if (res.ok) {
+      showToast("✅ Thanks! Your message has been sent.");
+      closeModal("supportModal");
+      form.reset();
+    } else {
+      showToast("❌ Failed to send. Try again.");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast("⚠️ Network error.");
+  }
+});
+
+// Toast utility
+function showToast(msg) {
+  let toast = document.createElement("div");
+  toast.className = "toast show";
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.classList.remove("show"); }, 3000);
+  setTimeout(() => { toast.remove(); }, 3500);
+}
+
+
+// Set scrolling text for supp 
+document.addEventListener("DOMContentLoaded", () => {
+  const scrollText = document.querySelector(".feedback-scroll");
+
+  setTimeout(() => {
+    scrollText.style.display = "inline-block";   // show
+    scrollText.addEventListener("animationend", () => {
+      scrollText.style.display = "none";        // hide again when finished
+    });
+  }, 3000); // wait 3s before scrolling starts
+});
+
 const links = [
 
   "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
@@ -6858,5 +7000,6 @@ setInterval(() => {
 
 
 </script>
+</div>
 </body>
 </html>
