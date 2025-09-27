@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
- <!-- clarity --> 
+ <!-- clarity -->
      <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -3038,141 +3038,6 @@ margin-top: 200px;
     transition-delay: 0.2s;
 }
 
-/* Top 10 button styled like tubetrailer overlay */
-.top10-btn {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.4);
-  color: rgba(255,255,255,0.85);
-  font-size: 13px;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 210; /* above video but below other UI if needed */
-  transition: background 0.2s;
-}
-
-.top10-btn:hover {
-  background: rgba(0,0,0,0.6);
-}
-
-/* Fullscreen dark backdrop */
-/* Backdrop */
-.top10-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: #000;   /* <- solid black instead of rgba */
-  z-index: 900;
-  overflow-y: auto;
-}
-
-/* Container */
-.top10-modal-content {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-}
-
-/* Close button */
-.top10-modal .close-btn {
-  position: fixed;        /* instead of absolute */
-  right: 20px;
-  top: 20px;
-  font-size: 26px;
-  color: rgba(255,255,255,0.85);
-  background: rgba(0,0,0,0.5); /* subtle dark circle background */
-  border: none;
-  cursor: pointer;
-  z-index: 6000;          /* higher than modal content */
-  padding: 4px 10px;
-  border-radius: 20px;
-  line-height: 1;
-  transition: background 0.2s, color 0.2s;
-}
-.top10-modal .close-btn:hover {
-  background: rgba(255,255,255,0.2);
-  color: #fff;
-}
-
-
-#top10Player {
-  width: 100%;
-  height: 55vh;
-  background: #000;
-}
-
-
-
-/* Trailer List */
-.modal-list {
-  padding: 16px;
-}
-.modal-list h3 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
-}
-.top10-item {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 6px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.top10-item:hover {
-  background: rgba(255,255,255,0.08);
-}
-.top10-thumb {
-  width: 120px;
-  height: 68px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-.top10-title {
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.top10-modal-content {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;       /* full screen height */
-  overflow-y: auto;    /* internal scroll */
-  padding-bottom: 80px; /* reserve space for bottom nav */
-}
-
-/* Fixed Player */
-.modal-player {
-  position: sticky;
-  top: 0;
-  background: #000;
-  z-index: 5;
-}
-#top10Player {
-  width: 100%;
-  height: 55vh;
-  background: #000;
-}
-.release-status {
-  padding: 12px 20px;
-  text-align: center;       /* ✅ centers the text */
-  font-size: 16px;
-  font-weight: 700;         /* ✅ makes it bold */
-  color: #fff;
-  background: rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-
 
     </style>
 </head>
@@ -3245,8 +3110,8 @@ margin-top: 200px;
     </video>
     
     <a href="#" id="videoLink" class="video-link" target="_blank" rel="noopener"></a>
-    <!-- Top 10 Trailers button inside player -->
-<button id="top10Btn" class="top10-btn">View More></button>
+   
+
 </button></button>
   </div>
   
@@ -3694,28 +3559,6 @@ margin-top: 200px;
 </div>
 
 
-<!-- Top 10 Trailers Modal -->
-<!-- Top 10 Trailers Modal -->
-<div id="top10Modal" class="top10-modal">
-  <div class="top10-modal-content">
-    <span id="closeTop10Btn" class="close-btn">×</span>
-
-    <!-- Fixed Video Player -->
-    <div class="modal-player">
-      <video id="top10Player" controls autoplay playsinline></video>
-    </div>
-
-    <!-- Release Status -->
-<div id="releaseStatus" class="release-status"></div>
-
-    <!-- Trailer list -->
-    <div class="modal-list">
-      <h3>New Releases</h3>
-      <div id="top10List">Loading...</div>
-    </div>
-  </div>
-</div>
-
     <div id="aboutModal" class="modal">
     <div class="modal-content premium-modal">
         <span class="close-btn" onclick="hideAboutModal()">×</span>
@@ -3754,9 +3597,13 @@ margin-top: 200px;
     const auth = getAuth(app);
     
     // Add RapidAPI configuration at the top with your other API configurations
-const RAPID_API_KEY = "bbcd1df015mshcbfd8a8f912f109p1f68a0jsn8e1dca2c166d";
+const RAPID_API_KEYS = [
+    "bbcd1df015mshcbfd8a8f912f109p1f68a0jsn8e1dca2c166d", // Your current key
+    "cbb6e2b6bamsh041eed1c81e7e0dp1b846ejsn669acdaca5ed", // Add your second key
+    // Add more keys as needed
+];
 
-// RapidAPI endpoints that work similarly to YouTube API
+// ✅ ALL 4 RapidAPI endpoints that you confirmed work
 const rapidApis = [
     {
         name: "YouTube v3 (ytdlfree)",
@@ -3774,13 +3621,6 @@ const rapidApis = [
                     medium: { url: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.high?.url || "" }
                 }
             }
-        }),
-        mapVideoDetails: item => ({
-            id: item.id,
-            contentDetails: {
-                duration: item.contentDetails?.duration || "PT0S"
-            },
-            statistics: item.statistics || {}
         })
     },
     {
@@ -3799,10 +3639,45 @@ const rapidApis = [
                 }
             }
         })
+    },
+    {
+        name: "YouTube v3 Lite",
+        searchUrl: "https://youtube-v3-lite.p.rapidapi.com/search?part=snippet&q={query}&maxResults={maxResults}&type=video",
+        host: "youtube-v3-lite.p.rapidapi.com",
+        mapSearchItem: item => ({
+            id: { videoId: item.id?.videoId || item.id },
+            snippet: {
+                title: item.snippet?.title || "Unknown Title",
+                description: item.snippet?.description || "",
+                channelTitle: item.snippet?.channelTitle || "Unknown Channel",
+                publishedAt: item.snippet?.publishedAt || new Date().toISOString(),
+                thumbnails: {
+                    medium: { url: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.high?.url || "" }
+                }
+            }
+        })
+    },
+    {
+        name: "YouTube Scraper3",
+        searchUrl: "https://youtube-scraper3.p.rapidapi.com/api/v1/search?query={query}",
+        host: "youtube-scraper3.p.rapidapi.com",
+        mapSearchItem: item => ({
+            id: { videoId: item.videoId || item.id },
+            snippet: {
+                title: item.title || "Unknown Title",
+                description: item.description || "",
+                channelTitle: item.channelTitle || "Unknown Channel",
+                publishedAt: item.uploadedAt || new Date().toISOString(),
+                thumbnails: {
+                    medium: { url: item.thumbnail || item.thumbnails?.[0]?.url || "" }
+                }
+            }
+        })
     }
 ];
 
 let currentRapidApiIndex = 0;
+
 
     const apiKeys =
      [
@@ -4332,47 +4207,53 @@ function isAnimeRelated(video) {
             </div>
         </div>
     `;
-  
 
     const track = document.getElementById(`${containerId}-track`);
+
     items.forEach(item => {
         const carouselItem = document.createElement('div');
         carouselItem.className = 'carousel-item';
-        carouselItem.innerHTML = `
-            <div class="card">
-                <img src="${item.snippet.thumbnails.medium.url}" class="thumbnail"
-                     data-video-id="${item.id.videoId}"
-                     data-title="${escapeHtml(item.snippet.title)}"
-                     data-thumbnail="${item.snippet.thumbnails.medium.url}">
-                <div class="carousel-overlay">
-                    <h3>${escapeHtml(item.snippet.title)}</h3>
-                    <p>${escapeHtml(item.snippet.channelTitle)}</p>
-                </div>
-            </div>
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const img = document.createElement('img');
+        img.className = 'thumbnail';
+        img.src = item.snippet.thumbnails.medium.url;
+        img.dataset.videoId = item.id.videoId;
+        img.dataset.title = escapeHtml(item.snippet.title);
+        img.dataset.thumbnail = item.snippet.thumbnails.medium.url;
+
+        // 🔑 attach fade handler here
+        loadImageWithFade(img);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'carousel-overlay';
+        overlay.innerHTML = `
+            <h3>${escapeHtml(item.snippet.title)}</h3>
+            <p>${escapeHtml(item.snippet.channelTitle)}</p>
         `;
+
+        card.appendChild(img);
+        card.appendChild(overlay);
+        carouselItem.appendChild(card);
         track.appendChild(carouselItem);
+
+        // click event
+        carouselItem.addEventListener('click', () => {
+            const videoId = img.dataset.videoId;
+            if (videoId) {
+                openVideoInPlayer(videoId);
+            } else {
+                console.error('Still no videoId. At this point, question your life choices.');
+            }
+        });
     });
-
-    // Attach click event to thumbnails
-    track.querySelectorAll('.carousel-item').forEach(item => {
-  const thumb = item.querySelector('.thumbnail');
-  const videoId = thumb?.getAttribute('data-video-id');
-
-  item.addEventListener('click', () => {
-    console.log('Item clicked, videoId:', videoId);
-    if (videoId) {
-  openVideoInPlayer(videoId);
-
-    } else {
-      console.error('Still no videoId. At this point, question your life choices.');
-    }
-  });
-});
-    
 
     startAutoScroll(containerId);
 }
-    let carouselIntervals = {};
+// global map of intervals for carousels
+let carouselIntervals = {};
 
     function startAutoScroll(containerId) {
         if (carouselIntervals[containerId]) {
@@ -4486,13 +4367,22 @@ window.moveCarousel = moveCarousel;
     wrapper.className = 'card-wrapper';
     wrapper.appendChild(card);
 
-    // Add event listeners
-    card.querySelector('.thumbnail').addEventListener('click', () => {
-        playVideo(video.id.videoId, escapeHtml(video.snippet.title), video.snippet.thumbnails.medium.url);
-    });
-    card.querySelector('.favorite-btn').addEventListener('click', (e) => {
-        toggleFavorite(e, video.id.videoId, escapeHtml(video.snippet.title), video.snippet.thumbnails.medium.url);
-    });
+    // 🔑 NEW: attach fade handler immediately to this thumbnail
+    const thumbEl = card.querySelector('.thumbnail');
+    if (thumbEl) {
+        loadImageWithFade(thumbEl);
+        thumbEl.addEventListener('click', () => {
+            playVideo(video.id.videoId, escapeHtml(video.snippet.title), video.snippet.thumbnails.medium.url);
+        });
+    }
+
+    // Favorite button
+    const favBtn = card.querySelector('.favorite-btn');
+    if (favBtn) {
+        favBtn.addEventListener('click', (e) => {
+            toggleFavorite(e, video.id.videoId, escapeHtml(video.snippet.title), video.snippet.thumbnails.medium.url);
+        });
+    }
 
     return wrapper;
 }
@@ -5429,6 +5319,7 @@ async function fetchWithRapidAPI(urlTemplate, options = {}) {
 
     while (attempts < totalApis) {
         const api = rapidApis[currentRapidApiIndex];
+        console.log(`🔥 Trying: ${api.name}`);
         
         try {
             // Determine what type of request this is based on URL pattern
@@ -5450,7 +5341,7 @@ async function fetchWithRapidAPI(urlTemplate, options = {}) {
                 
                 if (response.ok) {
                     const data = await response.json();
-                    // Transform RapidAPI response to match YouTube API structure
+                    console.log(`✅ Success: ${api.name}`);
                     return transformRapidResponse(data, api, 'search');
                 }
             } else if (urlTemplate.includes('/videos?')) {
@@ -5468,15 +5359,16 @@ async function fetchWithRapidAPI(urlTemplate, options = {}) {
                 
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(`✅ Success: ${api.name}`);
                     return transformRapidResponse(data, api, 'videoDetails');
                 }
             } else if (urlTemplate.includes('/channels?')) {
                 // Channel details request - not all RapidAPIs support this
-                console.warn("Channel details not fully supported by RapidAPI fallback");
+                console.log(`⚠️ Skip: ${api.name} - no channel support`);
                 return { items: [] };
             }
         } catch (err) {
-            console.error(`RapidAPI ${api.name} failed:`, err);
+            console.log(`❌ Failed: ${api.name}`);
         }
 
         // Move to next RapidAPI
@@ -5484,6 +5376,7 @@ async function fetchWithRapidAPI(urlTemplate, options = {}) {
         attempts++;
     }
 
+    console.log(`💥 All endpoints failed`);
     throw new Error("All RapidAPI endpoints failed");
 }
 
@@ -6256,33 +6149,37 @@ function playVideo(index) {
   });
 }
 
+// In the JavaScript section, replace the mute button functionality
 document.addEventListener('DOMContentLoaded', () => {
-  // Ensure players start muted by default (if you want default mute)
+  // Ensure players start muted by default
   isMuted = true;
   if (front) front.muted = isMuted;
   if (back) back.muted = isMuted;
 
   const muteToggle = document.getElementById('muteToggle');
   if (muteToggle) {
-    // set initial visual class
+    // Set initial visual class
     muteToggle.classList.add(isMuted ? 'muted' : 'unmuted');
 
-    // repurpose click: open Top 10 modal quickly
+    // Proper mute toggle functionality
     muteToggle.addEventListener('click', () => {
-      // open modal logic (reuses your modal code)
-      top10Modal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      renderList();
-
-      if (TOP10_TRAILERS && TOP10_TRAILERS[0]) {
-        top10Player.src = TOP10_TRAILERS[0].videoUrl;
-        top10Player.play();
-        const statusEl = document.getElementById('releaseStatus');
-        if (statusEl) statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[0].releaseDate);
-      }
+      isMuted = !isMuted;
+      
+      // Apply mute state to both videos
+      front.muted = isMuted;
+      back.muted = isMuted;
+      
+      // Update visual state
+      muteToggle.classList.toggle('muted', isMuted);
+      muteToggle.classList.toggle('unmuted', !isMuted);
+      
+      // Update aria-pressed attribute for accessibility
+      muteToggle.setAttribute('aria-pressed', isMuted.toString());
     });
   }
 });
+
+
 
 // Proper crossfade transition
 front.addEventListener("ended", () => {
@@ -6736,225 +6633,6 @@ function startHelperTextFade() {
 }
 
 
-//Top 10 trailer js
-document.addEventListener('DOMContentLoaded', () => {
-  // Modal + player elements
-  const top10Btn = document.getElementById('top10Btn');
-  const top10Modal = document.getElementById('top10Modal');
-  const closeTop10Btn = document.getElementById('closeTop10Btn');
-  const top10List = document.getElementById('top10List');
-  const top10Player = document.getElementById('top10Player');
-  const notifyBtn = document.getElementById('notifyBtn');
-  const notifyMsg = document.getElementById('notifyMsg');
-
-  // Explore tab videos
-  const vidA = document.getElementById('vidA'); // main visible video
-  const vidB = document.getElementById('vidB'); // preloading video
-
-  // Define your 10 trailers here
-  const TOP10_TRAILERS = [
-    {
-      title: "Robin Hood",
-      videoUrl: "https://ia601006.us.archive.org/35/items/robin-hood-official-trailer-2025-new-movie-trailers-4-k-480p/ROBIN_HOOD_Official_Trailer__2025__New_Movie_Trailers_4K%28480p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2025-12-19"  // YYYY-MM-DD
-  
-    },
-    {
-      title: "The Bride",
-      videoUrl: "https://ia601006.us.archive.org/35/items/robin-hood-official-trailer-2025-new-movie-trailers-4-k-480p/THE_BRIDE_Official_Trailer__2026__Christian_Bale%28720p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2025-10-03"  // YYYY-MM-DD
-  
-    },
-    {
-      title: "Baki Dou",
-      videoUrl: "https://ia801004.us.archive.org/28/items/baki-dou-official-teaser-netflix-anime-720p_202509/BAKI-DOU___Official_Teaser___Netflix_Anime%28720p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2026-00-00"  // YYYY-MM-DD
- 
-    },
-    
-      {
-      title: "The Last Ronin",
-      videoUrl: "https://ia801007.us.archive.org/22/items/the-last-ronin-official-trailer-2025-720p/THE_LAST_RONIN_Official_Trailer__2025_%28720p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2025-12-25"  // YYYY-MM-DD
- 
-    },
-    
-     {
-      title: "Anaconda",
-      videoUrl: "https://ia601004.us.archive.org/33/items/anaconda-official-trailer-hd-720p/ANACONDA_%E2%80%93_Official_Trailer__HD_%28720p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2025-12-25"  // YYYY-MM-DD
- 
-    },
-    
-     {
-      title: "Wake up Dead Man- A knives out mystery",
-      videoUrl: "https://ia601006.us.archive.org/34/items/wake-up-dead-man-a-knives-out-mystery-official-teaser-netflix-480p/Wake_Up_Dead_Man__A_Knives_Out_Mystery___Official_Teaser___Netflix%28480p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2025-12-25"  // YYYY-MM-DD
- 
-    },
-    
-    {
-      title: "The Rip",
-      videoUrl: "https://ia600306.us.archive.org/27/items/the-rip-official-teaser-netflix-480p/The_Rip___Official_Teaser___Netflix%28480p%29.mp4",
-      thumb: "https://i.ibb.co/MDL5MgTq/file-00000000351061fd9c83cefdce1266f0.png",
-      releaseDate: "2026-01-16"  // YYYY-MM-DD
- 
-    },
-    
-  
-    
-    // ... add up to 10
-  ];
-
-  // Open modal
-  top10Btn.addEventListener('click', () => {
-    top10Modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    renderList();
-
-    // preload first trailer
-    if (TOP10_TRAILERS[0]) {
-  top10Player.src = TOP10_TRAILERS[0].videoUrl;
-  top10Player.play();
-
-  // 🔑 Show release status for the first trailer
-  const statusEl = document.getElementById("releaseStatus");
-  if (statusEl) {
-    statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[0].releaseDate);
-  }
-}
-
-    // Pause explore player
-    vidA?.pause();
-    vidB?.pause();
-  });
-
-  // Close modal
-  closeTop10Btn.addEventListener('click', () => {
-    top10Modal.style.display = 'none';
-    document.body.style.overflow = '';
-
-    // Stop modal video
-    top10Player.pause();
-    top10Player.removeAttribute('src');
-
-    // Resume explore player
-    if (vidA && vidA.src) {
-      vidA.play().catch(() => {});
-    }
-  });
-
-  // Click outside closes
-  top10Modal.addEventListener('click', (e) => {
-    if (e.target === top10Modal) closeTop10Btn.click();
-  });
-  
-  function getReleaseStatus(dateString) {
-  const today = new Date();
-  const releaseDate = new Date(dateString);
-
-  if (today < releaseDate) {
-    return `Releases on ${releaseDate.toDateString()}`;
-  } else {
-    return "Releases Next Year ";
-  }
-}
-
-  // Render list of trailers
-  function renderList() {
-  if (!top10List) return;
-
-  top10List.innerHTML = TOP10_TRAILERS.map((t, i) => `
-    <div class="top10-item" data-idx="${i}">
-      <img src="${t.thumb || ''}" class="top10-thumb" alt="${t.title || 'Trailer'}">
-      <div class="top10-details">
-        <div class="top10-title">${t.title || 'Untitled'}</div>
-        <div class="top10-meta">
-          <!-- Correct eye icon -->
-          <span class="view-count" title="Views">
-            <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-eye" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
-  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"></path>
-  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"></path>
-</svg>
-            <span class="view-number">${t.views !== undefined ? t.views : 0}</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  // Attach click listeners
-  document.querySelectorAll('.top10-item').forEach(el => {
-    el.addEventListener('click', async () => {
-      const idx = parseInt(el.dataset.idx, 10);
-      const videoUrl = TOP10_TRAILERS[idx].videoUrl;
-
-      // play video
-      top10Player.src = videoUrl;
-      top10Player.play();
-
-      // update release status
-      const statusEl = document.getElementById("releaseStatus");
-      if (statusEl) statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
-
-      // update local UI instantly
-      const viewNumEl = el.querySelector('.view-number');
-      if (viewNumEl) {
-        const current = parseInt(viewNumEl.textContent.replace(/\D/g, ''), 10) || 0;
-        viewNumEl.textContent = current + 1;
-      }
-
-      // persist via your worker
-      try {
-        const res = await fetch(`https://tubeanime.winnerukoh.workers.dev?key=${encodeURIComponent(videoUrl)}`, { method: 'POST' });
-        const data = await res.json();
-        if (data && data.views && viewNumEl) viewNumEl.textContent = data.views;
-      } catch (err) {
-        console.warn('worker increment failed', err);
-      }
-    });
-  });
-
-  // load existing counts
-  if (typeof loadViewsFromWorker === 'function') loadViewsFromWorker();
-
-
-async function loadViewsFromWorker() {
-  for (let i = 0; i < TOP10_TRAILERS.length; i++) {
-    const videoUrl = TOP10_TRAILERS[i].videoUrl;
-    const el = document.querySelector(`.top10-item[data-idx="${i}"] .view-number`);
-    if (!el) continue;
-
-    try {
-      const res = await fetch(`https://tubeanime.winnerukoh.workers.dev?key=${encodeURIComponent(videoUrl)}`);
-      const data = await res.json();
-      el.textContent = data.views;
-    } catch (err) {
-      console.error("Error loading views:", err);
-    }
-  }
-}
-  document.querySelectorAll('.top10-item').forEach(el => {
-    el.addEventListener('click', () => {
-      const idx = el.dataset.idx;
-      top10Player.src = TOP10_TRAILERS[idx].videoUrl;
-      top10Player.play();
-
-      // 🔑 Update release status text
-      const statusEl = document.getElementById("releaseStatus");
-      statusEl.textContent = getReleaseStatus(TOP10_TRAILERS[idx].releaseDate);
-    });
-  });
-}
-});
-
-
 function openModal(id) {
   document.getElementById(id).style.display = "flex";
 }
@@ -6999,6 +6677,22 @@ function showToast(msg) {
   setTimeout(() => { toast.remove(); }, 3500);
 }
 
+function createVideoCard(video) {
+  const videoId = video.id.videoId || video.id; 
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+  return `
+    <div class="card">
+      <img class="thumbnail" src="${thumbnailUrl}" alt="${video.snippet?.title || 'Video'}">
+      <div class="card-content">
+        <h3 class="video-title">${video.snippet?.title || ''}</h3>
+        <p class="channel">${video.snippet?.channelTitle || ''}</p>
+      </div>
+    </div>
+  `;
+}
+
+
 const links = [
 
 
@@ -7023,9 +6717,7 @@ const links = [
 "https://pubertytechnicallyknowhow.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb"
 
 
-
 ];
-
 
 
 // Load the last used index (default to 0 if not set)
@@ -7033,28 +6725,18 @@ const links = [
 
 let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
-
-
 setInterval(() => {
 
 
   // Redirect to the current link
+window.location.href = links[currentLinkIndex];
 
+ // Update and save the next index (0 → 1 → 0 → 1...)
 
-  window.location.href = links[currentLinkIndex];
-
-
-  
-
-
-  // Update and save the next index (0 → 1 → 0 → 1...)
-
-
-  currentLinkIndex = (currentLinkIndex + 1) % links.length;
+ currentLinkIndex = (currentLinkIndex + 1) % links.length;
 
 
   localStorage.setItem('currentAdIndex', currentLinkIndex);
-
 
 }, 30000); // Redirect every 30 seconds
 
