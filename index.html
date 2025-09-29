@@ -3907,7 +3907,7 @@ function saveToCache(key, data) {
   }
 }
 
-function loadFromCache(key, maxAgeHours = 1) {  // Changed from 24 to 1
+function loadFromCache(key, maxAgeHours = 5) {  // Changed from 1 to 5 hours
   const raw = localStorage.getItem(key);
   if (!raw) {
     console.warn(`[📦 CACHE: LOAD] Key "${key}" not found in localStorage.`);
@@ -5182,12 +5182,28 @@ async function fetchVideoDetails(videoId) {
     const viewCount = document.getElementById('viewCount');
     const likeCount = document.getElementById('likeCount');
 
+    console.log('🔍 Starting fetchVideoDetails for:', videoId);
+
     try {
+        // Test with a direct API call first
+        const testUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${API_KEYS[0]}`;
+        console.log('🔗 Testing URL:', testUrl);
+        
+        const testResponse = await fetch(testUrl);
+        console.log('📡 Test response status:', testResponse.status);
+        
+        const testData = await testResponse.json();
+        console.log('📊 Test data:', testData);
+
+        // Now try with your rotation function
         const data = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key={API_KEY}`
         );
 
+        console.log('🔄 Rotation function returned:', data);
+
         if (!data || !data.items || data.items.length === 0) {
+            console.error('❌ No items in data:', data);
             videoTitle.textContent = "Video not found.";
             return;
         }
@@ -5195,6 +5211,8 @@ async function fetchVideoDetails(videoId) {
         const video = data.items[0];
         const snippet = video.snippet;
         const stats = video.statistics;
+
+        console.log('✅ Video data:', snippet);
 
         videoTitle.textContent = snippet.title;
         channelName.textContent = snippet.channelTitle;
@@ -5419,10 +5437,12 @@ async function fetchWithRotation(urlTemplate, options = {}) {
         const url = urlTemplate.replace('{API_KEY}', apiKey);
 
          try {
-        const response = await fetch(url, options);
-        if (response.ok) {
-            // Return the response object, not the parsed JSON
-            return response;
+    const response = await fetch(url, options);
+    if (response.ok) {
+        // ✅ FIX: Parse and return JSON data instead of Response object
+        const data = await response.json();
+        return data; // ✅ Now returns parsed JSON
+    
         } else {
             console.warn(`YouTube API key index ${currentApiKeyIndex} failed: ${response.status}`);
         }
