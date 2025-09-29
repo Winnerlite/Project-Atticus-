@@ -3047,7 +3047,7 @@ margin-top: 200px;
   <div class="search-wrapper">
     <!-- ✅ Live Search Results (Place this right below the input) -->
     <div id="liveSearchResults" class="search-results" style="display: none;"></div>
-    
+    <!-- hidden button 
     <button id="reloadBtn" class="reload-btn" title="Reload">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
     <path d="M470.7,280.2c2.9-11.2,4.7-22.9,4.7-35c0-75.8-61.4-137.1-137.1-137.1c-19.5,0-37.9,4.1-54.7,11.4
@@ -3058,7 +3058,7 @@ margin-top: 200px;
       l32.1-32.1V254.3z"></path>
   </svg>
 </button>
-
+-->
     <button id="homeBtn" class="reload-btn" title="Go to Explore">
   <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill="var(--primary)" d="M43.4,8.3L4,15l-0.3-2c-0.4-2.2,1.1-4.2,3.3-4.6l31.6-5.3c2.2-0.4,4.2,1.1,4.6,3.3L43.4,8.3z"></path>
@@ -3596,7 +3596,7 @@ margin-top: 200px;
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     
-    const CACHE_PROXY_URL = 'https://tubetrailer.ukowills.workers.dev';
+    const CACHE_PROXY_URL = 'https://tubetrailerpro.ukowills.workers.dev/';
     
     // Add RapidAPI configuration at the top with your other API configurations
 const RAPID_API_KEYS = [
@@ -3864,6 +3864,32 @@ function showSkeletons() {
         errorElement.style.display = 'block';
     }
 
+
+// Reload from cache (no API calls at all)
+function reloadFromCache() {
+    console.log('🔄 Reloading from cache...');
+    
+    // Load from cache
+    const cachedTrailerResults = loadFromCache('cachedTrailerResults') || [];
+    const cachedMovieResults = loadFromCache('cachedMovieResults') || [];
+    const cachedAnimeResults = loadFromCache('cachedAnimeResults') || [];
+    
+    if (cachedTrailerResults.length > 0) {
+        trailerResults = cachedTrailerResults;
+        movieResults = cachedMovieResults;
+        animeResults = cachedAnimeResults;
+        
+        displayExploreContent();
+        createExploreCarousel();
+        fetchForYouContent();
+        
+        showToast('Content reloaded from cache! 🚀');
+    } else {
+        showToast('No cached content found. Fetching from worker...');
+        reloadWithWorker(); // Fallback to worker
+    }
+}
+
 function saveToCache(key, data) {
   try {
     const cacheEntry = {
@@ -4104,13 +4130,13 @@ setTimeout(initImageFade, 100);
 async function fetchExploreContent() {
     // Debug logging
     console.log('🚀 STARTING WORKER FETCH');
-    console.log('📡 Worker URL: https://tubetrailer.ukowills.workers.dev/explore');
+    console.log('📡 Worker URL: https://tubetrailerpro.ukowills.workers.dev/explore');
     showSkeletons();
     showLoading(true);
     
     try {
         // Use your worker URL
-        const response = await fetch('https://tubetrailer.ukowills.workers.dev/explore');
+        const response = await fetch('https://tubetrailerpro.ukowills.workers.dev/explore');
         const data = await response.json();
         
         if (data && !data.error) {
@@ -4151,7 +4177,7 @@ async function fetchExploreContent() {
             console.log('Trying YouTube API fallback...');
             await fetchExploreContentWithYouTube();
         } catch (fallbackError) {
-            showError('All content sources failed');
+            showError('failed to load. Check internet');
         }
     } finally {
         showLoading(false);
@@ -4482,19 +4508,23 @@ async function searchContent() {
     showLoading(true);
     
     try {
+        // Fetch all search responses and parse them as JSON
         const trailerResponse = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(query + ' trailer')}&type=video&key={API_KEY}`
         );
+        const trailerData = await trailerResponse.json();
 
         const movieResponse = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(query + ' full movie -trailer')}&type=video&videoDuration=long&key={API_KEY}`
         );
+        const movieData = await movieResponse.json();
 
         const animeResponse = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${encodeURIComponent(query + ' anime trailer OR full movie')}&type=video&key={API_KEY}`
         );
-
         const animeData = await animeResponse.json();
+
+        // Check for API errors
         if (animeData.error) {
             if (animeData.error.code === 403) {
                 switchApiKey();
@@ -4503,28 +4533,49 @@ async function searchContent() {
             throw new Error(animeData.error.message);
         }
 
-         const movieVideoIds = movieResponse.items.map(item => item.id.videoId).join(',');
+        if (trailerData.error) {
+            if (trailerData.error.code === 403) {
+                switchApiKey();
+                return searchContent();
+            }
+            throw new Error(trailerData.error.message);
+        }
+
+        if (movieData.error) {
+            if (movieData.error.code === 403) {
+                switchApiKey();
+                return searchContent();
+            }
+            throw new Error(movieData.error.message);
+        }
+
+        // Get movie details for duration filtering
+        const movieVideoIds = movieData.items.map(item => item.id.videoId).join(',');
         const movieDetailsResponse = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${movieVideoIds}&key={API_KEY}`
         );
+        const movieDetailsData = await movieDetailsResponse.json();
         
-        const fullMovies = movieResponse.items.map(item => ({
+        const fullMovies = movieData.items.map(item => ({
             ...item,
-            contentDetails: movieDetailsResponse.items.find(detail => detail.id === item.id.videoId)?.contentDetails
+            contentDetails: movieDetailsData.items.find(detail => detail.id === item.id.videoId)?.contentDetails
         }));
 
-        const animeVideoIds = animeResponse.items.map(item => item.id.videoId).join(',');
+        // Get anime details for duration filtering
+        const animeVideoIds = animeData.items.map(item => item.id.videoId).join(',');
         const animeDetailsResponse = await fetchWithRotation(
             `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${animeVideoIds}&key={API_KEY}`
         );
+        const animeDetailsData = await animeDetailsResponse.json();
         
-        const fullAnime = animeResponse.items.map(item => ({
+        const fullAnime = animeData.items.map(item => ({
             ...item,
-            contentDetails: animeDetailsResponse.items.find(detail => detail.id === item.id.videoId)?.contentDetails
+            contentDetails: animeDetailsData.items.find(detail => detail.id === item.id.videoId)?.contentDetails
         }));
 
+        // Combine and filter results
         exploreTotalResults = [
-            ...trailerResponse.items,
+            ...trailerData.items,
             ...fullMovies.filter(isFullLengthVideo),
             ...fullAnime.filter(video => isFullLengthVideo(video) && isAnimeRelated(video))
         ].sort((a, b) => new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt));
@@ -4538,6 +4589,7 @@ async function searchContent() {
         saveToHistory(query, exploreTotalResults[0]?.snippet?.thumbnails?.medium?.url || '');
         
     } catch (error) {
+        console.error('Search error:', error);
         showError(`Failed to search: ${error.message}`);
     } finally {
         showLoading(false);
@@ -4989,7 +5041,7 @@ localStorage.setItem('skipAuthModal', dontShowAgain ? 'true' : 'false');
         ) {
           localStorage.removeItem(key);
         }
-      });
+      });      
 
       location.hash = '#explorePage';
       showPage('explorePage');
@@ -5366,17 +5418,17 @@ async function fetchWithRotation(urlTemplate, options = {}) {
         const apiKey = API_KEYS[currentApiKeyIndex];
         const url = urlTemplate.replace('{API_KEY}', apiKey);
 
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) {
-                const data = await response.json();
-                return data;
-            } else {
-                console.warn(`YouTube API key index ${currentApiKeyIndex} failed: ${response.status}`);
-            }
-        } catch (err) {
-            console.error(`YouTube API key index ${currentApiKeyIndex} threw an error`, err);
+         try {
+        const response = await fetch(url, options);
+        if (response.ok) {
+            // Return the response object, not the parsed JSON
+            return response;
+        } else {
+            console.warn(`YouTube API key index ${currentApiKeyIndex} failed: ${response.status}`);
         }
+    } catch (err) {
+        console.error(`YouTube API key index ${currentApiKeyIndex} threw an error`, err);
+    }
 
         // Move to next key
         currentApiKeyIndex = (currentApiKeyIndex + 1) % totalKeys;
@@ -6100,7 +6152,7 @@ const playlist = [
  
  
  {
-    url: "https://ia801004.us.archive.org/33/items/anaconda-official-trailer-hd-720p/ANACONDA_%E2%80%93_Official_Trailer__HD_%28720p%29.mp4",
+    url: "https://ia601609.us.archive.org/14/items/the-astronaut-official-trailer-2025-kate-mara-laurence-fishburne-720p/The_Astronaut_-_Official_Trailer__2025__Kate_Mara%2C_Laurence_Fishburne%28720p%29.mp4",
      link: "#"
  },
  
@@ -6745,6 +6797,7 @@ setInterval(() => {
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 
 }, 30000); // Redirect every 30 seconds
+
 
 
 </script>
