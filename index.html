@@ -3132,6 +3132,32 @@ margin-top: 200px;
     transform: scale(1);
 }
 
+
+/* Pro Card Styling */
+.settings-icon.pro {
+  background: linear-gradient(135deg, #FFD700, #FF8C00) !important;
+}
+
+.pro-badge {
+  background: linear-gradient(135deg, #FF416C, #FF4B2B);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+  display: inline-block;
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 10px rgba(255, 65, 108, 0.4);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
     </style>
 </head>
 <body>
@@ -3418,6 +3444,15 @@ margin-top: 200px;
                 <i class="fas fa-chevron-right"></i>
             </div>
             
+            <div class="settings-card" onclick="getProVersion()">
+  <div class="settings-icon pro" style="background: linear-gradient(135deg, #FFD700, #FF8C00);">
+    <i class="fas fa-crown"></i>
+  </div>
+  <h3>✨ Go Pro - Free!</h3>
+  <p>Remove ALL ads forever • Unlimited access</p>
+  <div class="pro-badge">FREE DOWNLOAD</div>
+</div>
+
             <div class="settings-card" onclick="openModal('supportModal')">
   <div class="settings-icon about"><i class="fa-solid fa-headset"></i></div>
   <h3>Support & Feedback</h3>
@@ -6609,13 +6644,13 @@ const PROXY_URL = 'https://d1-templatevideo.winnerukoh.workers.dev/';
 // Image ads configuration
 const ads = [
   {
-    imageUrl: "https://i.ibb.co/Mk2tGS8b/0c8ee428bc779263160e3c071e1a741e.jpg",
-    redirectUrl: "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+    imageUrl: "https://i.ibb.co/FkhJmXMT/file-00000000306c61fdb0c25ad9b89705fe.png",
+    redirectUrl: "https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=1&st=mvhrcx9i&dl=0",
     storageKey: "adImage1"
   },
   {
-    imageUrl: "https://i.ibb.co/MDkGvggn/e72a5a7d-3f74-4ea9-9720-2fae079704ee.jpg",
-    redirectUrl: "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+    imageUrl: "https://i.ibb.co/1tN662TQ/file-00000000bbf461f499feb7a15c0d85d9.png",
+    redirectUrl: "https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=1&st=mvhrcx9i&dl=0",
     storageKey: "adImage2"
   }
 ];
@@ -6995,6 +7030,13 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(page, { attributes: true });
     });
 });
+
+<!-- go pro function -->
+function getProVersion() {
+  showToast('🚀 Opening Pro Version...');
+  window.open('https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=2&st=mvhrcx9i&dl=0', '_blank');
+}
+
 
 const links = [
 
