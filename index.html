@@ -3038,7 +3038,86 @@ margin-top: 200px;
     transition-delay: 0.2s;
 }
 
+/* hide player page*/
+.nav-item[data-page="playerPage"] {
+    display: none !important;
+}
 
+
+/* Now Playing Popup - Updated with animations */
+/* Now Playing Popup - Simple working version */
+.now-playing-popup {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card-bg);
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    padding: 10px 15px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    max-width: 280px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.now-playing-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.now-playing-popup img {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+}
+
+.now-playing-popup span {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.now-playing-popup button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: var(--transition);
+}
+
+.now-playing-popup button:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.now-playing-popup .close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.now-playing-popup .close:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text);
+}
     </style>
 </head>
 <body>
@@ -3721,6 +3800,7 @@ const API_KEYS = [
     'AIzaSyCdgE2wdZSwkppXnd7EdydLQrhfM7-GxW0'
     
 ];
+
 
 let currentApiKeyIndex = 0;
     let currentKeyIndex = 0;
@@ -5887,6 +5967,12 @@ async function openTVSeries(tvId) {
     ]);
 
     const series = await seriesRes.json();
+    
+       // ✅ ADD THIS LINE - Show now playing popup
+    setTimeout(() => {
+    showNowPlaying(series.name, `https://image.tmdb.org/t/p/w200${series.poster_path}`, tvId, 'tv');
+}, 500);
+    
     const providers = await providersRes.json();
     const defaultSeason = 1;
     const vidSrcUrl = `https://vidsrc.me/embed/tv?tmdb=${tvId}&season=${defaultSeason}&episode=1`;
@@ -6621,6 +6707,14 @@ try {
   const data = await res.json();
 
   const title = data.title || data.name || "Untitled";
+  
+   // ✅ ADD THIS LINE - Show now playing popup
+   
+
+setTimeout(() => {
+    showNowPlaying(title, `https://image.tmdb.org/t/p/w200${data.poster_path}`, id, type);
+}, 500);
+    
   const release_date = data.release_date || data.first_air_date || "";
   const year = release_date ? release_date.split("-")[0] : "";
   const overview = data.overview || "No description available.";
@@ -6776,43 +6870,141 @@ function createVideoCard(video) {
   `;
 }
 
+
+// Show popup when playing something
+
+// Now Playing functionality
+let currentMedia = null;
+let popupTimeout = null;
+
+// Show popup when playing something
+function showNowPlaying(title, image, id, type) {
+    currentMedia = { id, type, title, image };
+    
+    // Clear any existing timeout
+    if (popupTimeout) {
+        clearTimeout(popupTimeout);
+        popupTimeout = null;
+    }
+    
+    const popup = document.getElementById('nowPlayingPopup');
+    document.getElementById('nowPlayingImg').src = image;
+    document.getElementById('nowPlayingText').textContent = title;
+    
+    // Show with animation
+    popup.classList.add('show');
+    
+    // Auto hide after 8 seconds
+    popupTimeout = setTimeout(() => hidePlaying(), 8000);
+}
+
+// Hide popup with fade out
+function hidePlaying() {
+    const popup = document.getElementById('nowPlayingPopup');
+    popup.classList.remove('show');
+    
+    if (popupTimeout) {
+        clearTimeout(popupTimeout);
+        popupTimeout = null;
+    }
+}
+
+// Resume playing
+function resumePlaying() {
+    if (currentMedia) {
+        switchTab('watchPage');
+        setTimeout(() => {
+            openWatchPageWithContent(currentMedia.id, currentMedia.type);
+            hidePlaying();
+        }, 100);
+    }
+}
+
+// Check page changes and show popup if needed
+function checkPageForPopup() {
+    const currentPage = document.querySelector('.page.active').id;
+    const popup = document.getElementById('nowPlayingPopup');
+    
+    // Don't show on player/settings pages
+    if (currentPage === 'playerPage' || currentPage === 'mePage') {
+        hidePlaying();
+        return;
+    }
+    
+    // Show popup if we have current media and we're on explore/tv page
+    if (currentMedia && (currentPage === 'explorePage' || currentPage === 'tvPage')) {
+        // Update popup content
+        document.getElementById('nowPlayingImg').src = currentMedia.image;
+        document.getElementById('nowPlayingText').textContent = currentMedia.title;
+        
+        // Show with animation
+        popup.classList.add('show');
+        
+        // Restart auto-hide timer
+        if (popupTimeout) {
+            clearTimeout(popupTimeout);
+        }
+        popupTimeout = setTimeout(() => hidePlaying(), 8000);
+    }
+}
+
+// Listen for page changes
+document.addEventListener('DOMContentLoaded', function() {
+    // Watch for page changes
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                setTimeout(checkPageForPopup, 50);
+            }
+        });
+    });
+    
+    // Observe all pages for class changes
+    document.querySelectorAll('.page').forEach(page => {
+        observer.observe(page, { attributes: true });
+    });
+});
+
 const links = [
 
+
   "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
+
 
   "https://pubertytechnicallyknowhow.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
 
 
+
 "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+
 
 
 "https://www.profitableratecpm.com/cd3u7qtz?key=84fdd083654a6c66b57576e5df4186b4",
 
 
+
 "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+
 
 "https://pubertytechnicallyknowhow.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb"
 
 
-];
 
+];
 
 // Load the last used index (default to 0 if not set)
 
-let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
+let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
 setInterval(() => {
 
-  // Redirect to the current link
-
-  window.location.href = links[currentLinkIndex];
-
-  
+ // Redirect to the current link
+ window.location.href = links[currentLinkIndex];
 
   // Update and save the next index (0 → 1 → 0 → 1...)
 
-  currentLinkIndex = (currentLinkIndex + 1) % links.length;
+ currentLinkIndex = (currentLinkIndex + 1) % links.length;
 
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 
@@ -6821,6 +7013,13 @@ setInterval(() => {
 
 
 </script>
+<!-- Now Playing Popup -->
+<div id="nowPlayingPopup" class="now-playing-popup">
+    <img id="nowPlayingImg" src="" alt="">
+    <span id="nowPlayingText">Now Playing</span>
+    <button onclick="resumePlaying()">Resume</button>
+    <button class="close" onclick="hidePlaying()">×</button>
+</div>
 </div>
 </body>
 </html>
