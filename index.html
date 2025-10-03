@@ -3118,6 +3118,20 @@ margin-top: 200px;
     background: rgba(255,255,255,0.1);
     color: var(--text);
 }
+
+/* Ad Image Fade Animations */
+
+.ad-image {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ad-image.loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
     </style>
 </head>
 <body>
@@ -6604,7 +6618,6 @@ const ads = [
     redirectUrl: "https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
     storageKey: "adImage2"
   }
-  
 ];
 
 // Get current ad index
@@ -6613,9 +6626,13 @@ currentAdIndex = (currentAdIndex + 1) % ads.length;
 localStorage.setItem('currentAdIndex', currentAdIndex);
 const currentAd = ads[currentAdIndex];
 
-// Immediately create and display the ad link
+// Show loading spinner first
 const adContainer = document.getElementById('adContainer');
+adContainer.innerHTML = '<div class="spinner"></div>';
+
+// Create the ad image with fade class
 const tempImg = new Image();
+tempImg.className = 'ad-image'; // Add fade class
 tempImg.src = currentAd.imageUrl;
 tempImg.style.maxWidth = "100%";
 tempImg.style.maxHeight = "100%";
@@ -6632,9 +6649,23 @@ adLink.style.width = "100%";
 adLink.style.height = "100%";
 adLink.appendChild(tempImg);
 
-// Clear any existing content and append new ad
-adContainer.innerHTML = '';
-adContainer.appendChild(adLink);
+// When image loads, replace spinner and trigger fade-in
+tempImg.onload = function() {
+  adContainer.innerHTML = '';
+  adContainer.appendChild(adLink);
+  
+  // Trigger fade-in animation after a small delay
+  setTimeout(() => {
+    tempImg.classList.add('loaded');
+  }, 50);
+};
+
+// If image fails to load, still show it without fade
+tempImg.onerror = function() {
+  adContainer.innerHTML = '';
+  adContainer.appendChild(adLink);
+  tempImg.classList.add('loaded'); // Still add loaded class
+};
 
 // Try to cache the image without blocking UI
 try {
@@ -6967,49 +6998,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 const links = [
 
+  "https://cultivationclassicalstarter.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
 
-  "https://pubertytechnicallyknowhow.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
-
-
-  "https://pubertytechnicallyknowhow.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
+  "https://cultivationclassicalstarter.com/tmi7yv3z3t?key=10d1f1faf8d88f843112f5d3158b918a",
 
 
-
-"https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
-
+"https://cultivationclassicalstarter.com/m06est9z?key=c719d5e4c9dd79e8821c8639b98ab94f",
 
 
-"https://www.profitableratecpm.com/cd3u7qtz?key=84fdd083654a6c66b57576e5df4186b4",
+"https://cultivationclassicalstarter.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb",
 
 
+"https://cultivationclassicalstarter.com/c41y9secpw?key=35fcec158f84754523b7c80a38a3f45b",
 
-"https://pubertytechnicallyknowhow.com/gywrbezxbn?key=4e6421e6b6a6cff6634135ddd92498d6",
+"https://cultivationclassicalstarter.com/ygxvc1aa?key=c0b1ec5708f3dbf9f66a15a28421ed55",
 
-
-"https://pubertytechnicallyknowhow.com/hfqsyrqs?key=88fe3aa95b47b419b139a3568937cadb"
-
-
+"https://cultivationclassicalstarter.com/kw2uetiz?key=797d2b2b24f8878787846103f1a02e7d"
 
 ];
 
-// Load the last used index (default to 0 if not set)
 
+// Load the last used index (default to 0 if not set)
 
 let currentLinkIndex = localStorage.getItem('currentAdIndex') || 0;
 
+
 setInterval(() => {
 
- // Redirect to the current link
- window.location.href = links[currentLinkIndex];
+  // Redirect to the current link
+
+  window.location.href = links[currentLinkIndex];
+
+  
 
   // Update and save the next index (0 → 1 → 0 → 1...)
 
- currentLinkIndex = (currentLinkIndex + 1) % links.length;
+  currentLinkIndex = (currentLinkIndex + 1) % links.length;
 
   localStorage.setItem('currentAdIndex', currentLinkIndex);
 
 }, 30000); // Redirect every 30 seconds
-
 
 
 </script>
