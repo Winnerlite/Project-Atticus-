@@ -3158,6 +3158,77 @@ margin-top: 200px;
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+/* Auth Modal - Bottom Slide Animation */
+#authModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: flex-end; /* Changed from center */
+    justify-content: center;
+    z-index: 10000; /* Higher z-index */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+#authModal.show {
+    display: flex;
+    opacity: 1;
+}
+
+#authModal .modal-content {
+    background: #000000; /* Pure black */
+    padding: 25px;
+    border-radius: 20px 20px 0 0;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    max-height: 61vh;
+    overflow-y: auto;
+    border: 1px solid #333; /* Optional: Add a dark border */
+}
+
+/* If you want dark text inputs too */
+#authModal .modal-input {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: white;
+}
+
+#authModal .modal-input::placeholder {
+    color: #666;
+}
+
+#authModal.show .modal-content {
+    transform: translateY(0);
+}
+
+/* Custom scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+#authModal .modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+#authModal .modal-content::-webkit-scrollbar-track {
+    background: #333;
+    border-radius: 2px;
+}
+
+#authModal .modal-content::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+#authModal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
     </style>
 </head>
 <body>
@@ -4865,12 +4936,25 @@ async function searchTMDB(query) {
     }
 
     function showAuthModal() {
-        document.getElementById('authModal').style.display = 'block';
-    }
+    const modal = document.getElementById('authModal');
+    modal.style.display = 'flex';
+    
+    // Trigger animation after display is set
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
 
-    function closeAuthModal() {
-        document.getElementById('authModal').style.display = 'none';
-    }
+// Close auth modal with slide animation
+function closeAuthModal() {
+    const modal = document.getElementById('authModal');
+    modal.classList.remove('show');
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
 
     function toggleAuthMode() {
     isSignUpMode = !isSignUpMode;
@@ -6645,12 +6729,12 @@ const PROXY_URL = 'https://d1-templatevideo.winnerukoh.workers.dev/';
 const ads = [
   {
     imageUrl: "https://i.ibb.co/FkhJmXMT/file-00000000306c61fdb0c25ad9b89705fe.png",
-    redirectUrl: "https://www.dropbox.com/scl/fi/07vwqtillxagfcrg6kd5p/TubetrailerPro_release.unsigned-1759507289354-signed.apk?rlkey=60ypufgxthh769pw6ktbrzc8e&e=1&st=6hx8ifud&dl=0",
+    redirectUrl: "https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=1&st=mvhrcx9i&dl=0",
     storageKey: "adImage1"
   },
   {
     imageUrl: "https://i.ibb.co/1tN662TQ/file-00000000bbf461f499feb7a15c0d85d9.png",
-    redirectUrl: "https://www.dropbox.com/scl/fi/07vwqtillxagfcrg6kd5p/TubetrailerPro_release.unsigned-1759507289354-signed.apk?rlkey=60ypufgxthh769pw6ktbrzc8e&e=1&st=6hx8ifud&dl=0",
+    redirectUrl: "https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=1&st=mvhrcx9i&dl=0",
     storageKey: "adImage2"
   }
 ];
@@ -7034,7 +7118,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- go pro function -->
 function getProVersion() {
   showToast('🚀 Opening Pro Version...');
-  window.open('https://www.dropbox.com/scl/fi/07vwqtillxagfcrg6kd5p/TubetrailerPro_release.unsigned-1759507289354-signed.apk?rlkey=60ypufgxthh769pw6ktbrzc8e&e=1&st=6hx8ifud&dl=0', '_blank');
+  window.open('https://www.dropbox.com/scl/fi/ix60hd014qmfx9x8f6fer/TubetrailerPro_release.apk?rlkey=ua2h358ov9w2k280p6dcuew1p&e=2&st=mvhrcx9i&dl=0', '_blank');
 }
 
 
